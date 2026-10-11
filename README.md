@@ -1,89 +1,66 @@
 # Fxck Social Media (FSM)
 
-**Fxck Social Media (FSM)** is a distraction-free Chrome Extension (Manifest V3) built with TypeScript. It empowers you to take control of your attention by blocking social media sites using flexible focus timers, strict kill-switches, and local offline quote cards.
+A Chrome Manifest V3 extension, written in TypeScript, that blocks selected social media domains using a manual switch, a focus timer, and a kill-switch timer.
 
----
+## Features
 
-## ✨ Features
+- **Domain blocking:** Block a hostname and its subdomains (for example `x.com` / `twitter.com`, `instagram.com`, `facebook.com`).
+- **Focus timer:** Countdown timer with pause, resume, and cancel.
+- **Kill-switch timer:** While running, the popup and options pages cannot disable blocking, cancel the timer, or reduce the blocked domain set.
+- **Declarative Net Request:** Blocking uses dynamic DNR rules; blocked main-frame navigations redirect to an extension page.
+- **Blocked page:** Displays a random local quote image from the bundled set.
+- **Local storage:** Settings and timer state are stored in `chrome.storage.local`. No analytics or remote requests.
 
-- **Domain-Level Blocking:** Block targeted domain families (e.g., `x.com` / `twitter.com`, `instagram.com`, `facebook.com`) and all associated subdomains.
-- **Focus Timer:** Flexible work session timer supporting pause, resume, and cancellation.
-- **Kill-Switch Timer:** Non-bypassable hard lock timer that strictly prevents disabling blocking or modifying domain lists until the session ends.
-- **Manifest V3 Declarative Net Request (DNR):** Uses native Chrome DNR rules for lightweight and instantaneous redirection without constant background script execution.
-- **Motivational Block Page:** Redirects blocked navigations to a local extension page displaying random inspirational quote images offline.
-- **Privacy-First Architecture:** All settings, domain configurations, and session states are stored exclusively in `chrome.storage.local`. No analytics or tracking.
+## Requirements
 
----
+- Node.js 18 or later
+- Chrome 121 or later
 
-## 🚀 Getting Started
+## Install
 
-### Prerequisites
-
-- Node.js (v18 or higher recommended)
-- Google Chrome or Chromium-based browser (v121 or higher)
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/<your-username>/fsm.git
-   cd fsm
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Build the extension:**
-   ```bash
-   npm run build
-   ```
-
-4. **Load into Chrome:**
-   - Open Chrome and navigate to `chrome://extensions`.
-   - Enable **Developer mode** (toggle in the top-right corner).
-   - Click **Load unpacked**.
-   - Select the root repository folder (`fsm/`).
-
----
-
-## 🛠 Usage Guide
-
-1. Click the extension icon in your Chrome toolbar to open the popup or go to the Options page.
-2. Add the hostnames you wish to block (e.g. `instagram.com`).
-3. Grant host permissions when prompted so Chrome allows DNR blocking for those domains.
-4. Toggle manual blocking or start a Focus / Kill session.
-
----
-
-## 📜 Available Scripts
-
-- `npm run build`: Compiles TypeScript sources (`src/`) and prepares root runtime assets for Chrome.
-- `npm run test`: Executes the unit test suite verifying domain normalization and state machine behavior.
-- `npm run typecheck`: Runs TypeScript compiler without emitting files to verify type safety.
-
----
-
-## 🏗 Architecture & Design
-
-The extension is structured around a centralized Manifest V3 service worker that serves as the single source of truth for timer states, dynamic DNR rules, and alarms.
-
+```bash
+git clone https://github.com/shubhamxpawar/fsm.git
+cd fsm
+npm install
+npm run build
 ```
+
+Then load the extension:
+
+1. Open `chrome://extensions`.
+2. Enable Developer mode.
+3. Click Load unpacked and select the repository root.
+
+## Usage
+
+1. Open the popup or the options page.
+2. Add the hostnames you want to block.
+3. Grant host access when Chrome prompts, so DNR rules can be applied.
+4. Use the manual switch, or start a focus or kill-switch timer.
+
+The kill-switch timer cannot be stopped from the extension UI until it expires. It is not tamper-proof: Chrome allows the extension to be disabled or uninstalled, host access to be revoked, or the system clock to be changed.
+
+## Scripts
+
+- `npm run build`: Compile TypeScript from `src/` and write the runtime folders to the repository root.
+- `npm run test`: Build, then run the unit tests in `tests/`.
+- `npm run typecheck`: Run `tsc --noEmit`.
+
+## Layout
+
+```text
 fsm/
-├── manifest.json       # Chrome Extension Manifest V3
-├── src/                # TypeScript Source Code
-│   ├── background/     # Service worker, state management, DNR reconciliation
-│   ├── popup/          # Popup UI controls
-│   ├── options/        # Domain management and options page
-│   ├── blocked/        # Blocked redirection page
-│   └── shared/         # Common types, contracts, schema, and quote assets
-├── scripts/            # Build and compilation scripts
+├── manifest.json       # Manifest V3
+├── src/
+│   ├── background/     # Service worker, state, blocking rules, alarms
+│   ├── popup/          # Toolbar popup
+│   ├── options/        # Settings page
+│   ├── blocked/        # Redirect target for blocked navigations
+│   └── shared/         # Contracts, schema, policy, quote assets
+├── scripts/            # Build script
 └── tests/              # Unit tests
 ```
 
----
+Runtime folders (`background/`, `blocked/`, `options/`, `popup/`, `quotes/`, `shared/`) and `dist/` are generated by the build and are not tracked.
 
-## 📄 License
-
-ISC License. See package configuration for details.
+See `ARCHITECTURE.md` for the state model, message flow, and blocking policy.
