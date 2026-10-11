@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Fxck Social Media",
+  "version": "0.1.0",
+  "description": "Block selected social-media sites with focused timers and supplied quote images.",
+  "minimum_chrome_version": "121",
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Fxck Social Media",
+    "default_popup": "popup/popup.html"
+  },
+  "options_page": "options/options.html",
+  "permissions": [
+    "alarms",
+    "declarativeNetRequestWithHostAccess",
+    "storage"
+  ],
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "blocked/blocked.html",
+        "blocked/blocked.js",
+        "quotes/*"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ]
+}
