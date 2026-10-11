@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark light">
+    <title>Fxck Social Media</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #08111f;
+        --panel: rgba(15, 23, 42, 0.9);
+        --panel-border: rgba(255, 255, 255, 0.12);
+        --text: #f8fafc;
+        --muted: #cbd5e1;
+        --accent: #fb7185;
+        --accent-alt: #38bdf8;
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.4);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-width: 360px;
+        max-width: 420px;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top right, rgba(251, 113, 133, 0.18), transparent 30%),
+          radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.12), transparent 28%),
+          linear-gradient(160deg, #020617 0%, #0f172a 100%);
+      }
+
+      .page {
+        padding: 14px;
+      }
+
+      .shell {
+        display: grid;
+        gap: 12px;
+      }
+
+      .hero,
+      .panel {
+        border-radius: 20px;
+        border: 1px solid var(--panel-border);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+
+      .hero {
+        position: relative;
+        padding: 14px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--accent);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.2rem;
+        line-height: 1.15;
+      }
+
+      .summary {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: rgba(248, 250, 252, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 0.8rem;
+      }
+
+      .chip.active {
+        background: rgba(251, 113, 133, 0.16);
+        border-color: rgba(251, 113, 133, 0.25);
+      }
+
+      .hero-options {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        min-width: 0;
+        padding: 8px 11px;
+        color: var(--text);
+        background: rgba(15, 23, 42, 0.74);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .panel {
+        padding: 14px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: 0.92rem;
+        letter-spacing: 0.02em;
+      }
+
+      .row {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field label,
+      .toggle-label {
+        font-size: 0.84rem;
+        color: var(--muted);
+      }
+
+      input[type="number"] {
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 10px 12px;
+        color: var(--text);
+        background: rgba(2, 6, 23, 0.55);
+      }
+
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: rgba(2, 6, 23, 0.38);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .toggle-copy {
+        display: grid;
+        gap: 2px;
+      }
+
+      .toggle-title {
+        font-size: 0.9rem;
+      }
+
+      .switch {
+        position: relative;
+        width: 48px;
+        height: 28px;
+        padding: 0;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        cursor: pointer;
+        flex: 0 0 auto;
+      }
+
+      .switch-track {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.34);
+        transition: background 120ms ease;
+      }
+
+      .switch-thumb {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #ffffff;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+        transition: transform 120ms ease;
+      }
+
+      .switch.is-on .switch-track {
+        background: linear-gradient(135deg, #7c3aed, #581c87);
+      }
+
+      .switch.is-on .switch-thumb {
+        transform: translateX(20px);
+      }
+
+      .switch:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      .switch:focus-visible {
+        outline: 3px solid rgba(216, 180, 254, 0.75);
+        outline-offset: 2px;
+      }
+
+      .toggle-note,
+      .fine-print {
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.45;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 9px 12px;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        color: #020617;
+        background: linear-gradient(135deg, #fda4af, var(--accent));
+      }
+
+      button.secondary {
+        color: var(--text);
+        background: rgba(15, 23, 42, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+
+      .status {
+        min-height: 1.2em;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+    </style>
+  </head>
+  <body>
+    <main class="page" aria-labelledby="popup-title">
+      <div class="shell">
+        <section class="hero">
+          <button id="open-options" type="button" class="secondary hero-options">Options</button>
+          <p class="eyebrow">Blocking control</p>
+          <h1 id="popup-title">Fxck Social Media</h1>
+          <p id="status-summary" class="summary">Loading current state…</p>
+          <div id="reason-chips" class="chips" aria-label="Active blocking reasons"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="manual-title">
+          <p id="manual-title" class="section-title">Manual switch</p>
+          <div class="toggle-row">
+            <div class="toggle-copy">
+              <span class="toggle-title">Block selected sites</span>
+              <span id="manual-note" class="toggle-note">When on, the selected domains are unavailable.</span>
+            </div>
+            <button id="manual-toggle" class="switch" type="button" aria-label="Toggle manual blocking" aria-pressed="false">
+              <span class="switch-track" aria-hidden="true"></span>
+              <span class="switch-thumb" aria-hidden="true"></span>
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="focus-title">
+          <p id="focus-title" class="section-title">Normal timer</p>
+          <div class="row">
+            <div class="field">
+              <label for="focus-minutes">Minutes</label>
+              <input id="focus-minutes" type="number" min="1" max="480" step="1" value="25">
+            </div>
+            <div id="focus-status" class="status"></div>
+            <div class="actions">
+              <button id="focus-start" type="button">Start</button>
+              <button id="focus-pause" type="button" class="secondary">Pause</button>
+              <button id="focus-resume" type="button" class="secondary">Resume</button>
+              <button id="focus-cancel" type="button" class="secondary">Cancel</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="kill-title">
+          <p id="kill-title" class="section-title">Kill timer</p>
+          <div class="row">
+            <div class="field">
+              <label for="kill-minutes">Minutes</label>
+              <input id="kill-minutes" type="number" min="1" max="480" step="1" value="60">
+            </div>
+            <div id="kill-status" class="status"></div>
+            <div class="actions">
+              <button id="kill-start" type="button">Start kill timer</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <p id="error-line" class="fine-print"></p>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

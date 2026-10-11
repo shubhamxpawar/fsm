@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark light">
+    <title>Site blocked</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --text: #f8fafc;
+        --muted: rgba(226, 232, 240, 0.86);
+        --panel: rgba(8, 15, 27, 0.78);
+        --panel-border: rgba(255, 255, 255, 0.14);
+        --accent: #fb7185;
+        --accent-soft: rgba(251, 113, 133, 0.18);
+        --shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #020617;
+        color: var(--text);
+      }
+
+      .page {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .quote-image,
+      .fallback {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .quote-image {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .fallback {
+        display: grid;
+        place-items: center;
+        padding: 32px;
+        background:
+          radial-gradient(circle at top left, rgba(251, 113, 133, 0.22), transparent 26%),
+          radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.16), transparent 28%),
+          linear-gradient(160deg, #020617 0%, #0f172a 55%, #020617 100%);
+        color: var(--muted);
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, rgba(2, 6, 23, 0.08) 0%, rgba(2, 6, 23, 0.12) 55%, rgba(2, 6, 23, 0.42) 100%);
+        pointer-events: none;
+      }
+
+      .status-card {
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
+        width: min(320px, calc(100vw - 32px));
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 22px;
+        border: 1px solid var(--panel-border);
+        background: var(--panel);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+      }
+
+      .eyebrow {
+        margin: 0;
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: #fda4af;
+      }
+
+      .title {
+        margin: 0;
+        font-size: 1.15rem;
+        line-height: 1.2;
+      }
+
+      .status-line {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.45;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 11px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(15, 23, 42, 0.5);
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .chip.is-active {
+        background: var(--accent-soft);
+        border-color: rgba(251, 113, 133, 0.34);
+        color: var(--text);
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 14px;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        color: #020617;
+        background: linear-gradient(135deg, #fda4af, var(--accent));
+      }
+
+      .button.secondary {
+        color: var(--text);
+        background: rgba(15, 23, 42, 0.54);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .button:focus-visible {
+        outline: 3px solid rgba(253, 164, 175, 0.65);
+        outline-offset: 2px;
+      }
+
+      .fine-print {
+        margin: 0;
+        color: rgba(226, 232, 240, 0.68);
+        font-size: 0.8rem;
+        line-height: 1.45;
+      }
+
+      @media (max-width: 720px) {
+        .status-card {
+          right: 12px;
+          bottom: 12px;
+          width: min(340px, calc(100vw - 24px));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page" aria-labelledby="blocked-title">
+      <div id="quote-image" class="quote-image" hidden aria-hidden="true"></div>
+      <div id="quote-fallback" class="fallback">Loading the quote image...</div>
+      <div class="overlay" aria-hidden="true"></div>
+
+      <section id="status-panel" class="status-card" aria-live="polite">
+        <p class="eyebrow">Access restricted</p>
+        <h1 id="blocked-title" class="title">This site is blocked right now.</h1>
+        <p id="reason-line" class="status-line">Checking the active reason...</p>
+        <p id="timer-line" class="status-line"></p>
+        <div id="reason-chips" class="chips"></div>
+        <div class="actions">
+          <button id="leave-page" class="button" type="button">Leave page</button>
+          <button id="reload-page" class="button secondary" type="button">Reload status</button>
+        </div>
+        <p class="fine-print">Timer controls stay in the popup.</p>
+      </section>
+    </main>
+    <script type="module" src="blocked.js"></script>
+  </body>
+</html>

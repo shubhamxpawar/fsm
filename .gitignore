@@ -2,13 +2,13 @@
 node_modules/
 
 # Build outputs
-dist/
-background/
-blocked/
-options/
-popup/
-quotes/
-shared/
+/dist/
+/background/
+/blocked/
+/options/
+/popup/
+/quotes/
+/shared/
 
 # Operating System and IDE files
 .DS_Store

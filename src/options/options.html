@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark light">
+    <title>Fxck Social Media settings</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #071019;
+        --panel: rgba(15, 23, 42, 0.88);
+        --panel-border: rgba(255, 255, 255, 0.12);
+        --text: #f8fafc;
+        --muted: #cbd5e1;
+        --accent: #22c55e;
+        --accent-alt: #38bdf8;
+        --danger: #fb7185;
+        --shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(34, 197, 94, 0.14), transparent 26%),
+          radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.15), transparent 28%),
+          linear-gradient(160deg, #020617 0%, #0f172a 55%, #020617 100%);
+      }
+
+      .page {
+        width: min(1120px, calc(100% - 32px));
+        margin: 24px auto 48px;
+      }
+
+      .hero,
+      .panel {
+        border-radius: 24px;
+        border: 1px solid var(--panel-border);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(20px);
+      }
+
+      .hero {
+        padding: 24px;
+        margin-bottom: 18px;
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--accent-alt);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1;
+        letter-spacing: -0.05em;
+      }
+
+      .lead {
+        margin: 16px 0 0;
+        max-width: 64ch;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        align-items: stretch;
+      }
+
+      .panel {
+        padding: 18px;
+        display: grid;
+        gap: 14px;
+        min-height: 100%;
+      }
+
+      .panel-domains {
+        min-height: 100%;
+      }
+
+      .panel-permissions {
+        align-content: start;
+      }
+
+      .panel-timers,
+      .panel-display {
+        align-content: start;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+      }
+
+      .muted {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field label {
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 11px 12px;
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        background: rgba(2, 6, 23, 0.45);
+      }
+
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        accent-color: var(--accent);
+      }
+
+      button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 14px;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        color: #020617;
+        background: linear-gradient(135deg, #86efac, var(--accent-alt));
+      }
+
+      button.secondary {
+        color: var(--text);
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      button.danger {
+        color: var(--text);
+        background: rgba(251, 113, 133, 0.18);
+        border: 1px solid rgba(251, 113, 133, 0.22);
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+
+      .domain-list,
+      .suggestion-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .domain-item,
+      .suggestion-item,
+      .toggle-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(2, 6, 23, 0.36);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .domain-copy,
+      .suggestion-copy,
+      .toggle-copy {
+        display: grid;
+        gap: 4px;
+      }
+
+      .domain-name,
+      .toggle-title {
+        font-weight: 600;
+      }
+
+      .domain-meta,
+      .suggestion-meta,
+      .fine-print,
+      .status {
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.5;
+      }
+
+      .status.error {
+        color: #fecdd3;
+      }
+
+      .status.ok {
+        color: #bbf7d0;
+      }
+
+      .split {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      @media (max-width: 920px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .split {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page" aria-labelledby="options-title">
+      <section class="hero">
+        <p class="eyebrow">Settings</p>
+        <h1 id="options-title">Configure the blocker</h1>
+        <p class="lead">
+          Domains, timers, permissions, and quote-page display rules all live here. Blocking still stays authoritative in the service worker.
+        </p>
+      </section>
+
+      <div class="grid">
+        <section class="panel panel-domains" aria-labelledby="domains-title">
+          <h2 id="domains-title" class="section-title">Selected domains</h2>
+          <p class="muted">Enter hostnames only. Parent domains automatically cover subdomains.</p>
+          <div class="row">
+            <div class="field" style="flex: 1 1 280px;">
+              <label for="domain-input">Add domain</label>
+              <input id="domain-input" type="text" placeholder="instagram.com">
+            </div>
+            <div class="field" style="align-self: end;">
+              <button id="add-domain" type="button">Add domain</button>
+            </div>
+          </div>
+          <p id="domain-feedback" class="status"></p>
+          <div class="suggestion-list" id="suggestion-list"></div>
+          <div class="domain-list" id="domain-list"></div>
+        </section>
+
+        <section class="panel panel-permissions" aria-labelledby="permissions-title">
+          <h2 id="permissions-title" class="section-title">Permissions and rule state</h2>
+          <div class="row">
+            <button id="grant-browser-access" type="button">Grant website access</button>
+          </div>
+          <p id="permission-summary" class="status"></p>
+          <p id="rule-error" class="status"></p>
+          <p class="fine-print">This asks Chrome for website access once, instead of prompting per domain. Saved domains still stay in your list even if access is not granted.</p>
+          <p class="fine-print">A running kill timer cannot be disabled inside the extension. Chrome-level disable or uninstall remains outside the extension’s control.</p>
+        </section>
+
+        <section class="panel panel-timers" aria-labelledby="durations-title">
+          <h2 id="durations-title" class="section-title">Timer defaults</h2>
+          <div class="split">
+            <div class="field">
+              <label for="focus-duration">Normal timer default minutes</label>
+              <input id="focus-duration" type="number" min="1" max="480" step="1">
+            </div>
+            <div class="field">
+              <label for="kill-duration">Kill timer default minutes</label>
+              <input id="kill-duration" type="number" min="1" max="480" step="1">
+            </div>
+          </div>
+        </section>
+
+        <section class="panel panel-display" aria-labelledby="display-title">
+          <h2 id="display-title" class="section-title">Page display preferences</h2>
+          <div class="toggle-row">
+            <div class="toggle-copy">
+              <span class="toggle-title">Show blocked-page status</span>
+              <span class="fine-print">Display the blocking reason and timer state on the blocked quote page.</span>
+            </div>
+            <input id="show-blocked-status" type="checkbox" aria-label="Show blocked-page status">
+          </div>
+          <div class="row">
+            <button id="save-settings" type="button">Save settings</button>
+          </div>
+          <p id="save-feedback" class="status"></p>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
